@@ -3,7 +3,7 @@ game 'gta5'
 
 author 'Kalashnikov#3535'
 description '47dynamic'
-version '1.0.0'
+version 'v1.0.0'
 
 client_script 'client.lua'
 
