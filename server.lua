@@ -54,4 +54,25 @@ AddEventHandler('onResourceStart', function(resourceName)
     TriggerEvent('47dynamic:ucitajpedove')
 end)
 
+local function provjeraverzije()
+    local resourceName = GetCurrentResourceName()
+    local currentVersion = GetResourceMetadata(resourceName, 'version', 0)
+    PerformHttpRequest('https://api.github.com/repos/Kalassh/47dynamic/releases/latest', function(code, response)
+        assert(code == 200, '47dynamic | Doslo je do pogreske prilikom trazenja azuriranja.')
+        local returnedData = assert(json.decode(response), '47dynamic | Dekodiranje JSON-a nije uspjelo.')
+        local latestVersion = returnedData.tag_name
+        local downloadLink = returnedData.html_url
 
+        if currentVersion == latestVersion then
+            print(('47dynamic | Koristite najnoviju verziju %s'):format(resourceName))
+        else
+            print('')
+            print(('47dynamic | Dostupno je novo azuriranje za %s'):format(resourceName))
+            print(('47dynamic | Vasa verzija: %s | Nova verzija: %s'):format(currentVersion, latestVersion))
+            print(('47dynamic | Preuzmite: %s'):format(downloadLink))
+            print('')
+        end
+    end, 'GET')
+end
+
+provjeraverzije()
