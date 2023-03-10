@@ -39,20 +39,30 @@ AddEventHandler('47dynamic:obrisipeda', function(pedId)
     end)
 end)    
 
-RegisterServerEvent('47dynamic:ucitajpedovesql')
-AddEventHandler('47dynamic:ucitajpedovesql', function()
-    MySQL.Async.fetchAll('SELECT * FROM pedovi', {}, function(result)
-        TriggerClientEvent('47dynamic:ucitajpedove', -1, result)
-        print('[^3SQL^0]: Ucitano ^4' .. #result .. '^0 pedova iz databaze.')
-    end)
-end)
-
 AddEventHandler('onResourceStart', function(resourceName)
-    if (GetCurrentResourceName() ~= resourceName) then
+    if GetCurrentResourceName() ~= resourceName then
         return
     end
-    TriggerEvent('47dynamic:ucitajpedovesql')
+    info()
 end)
+
+AddEventHandler('playerConnecting', function()
+    local src = source
+    Citizen.Wait(5000)
+    ucitaj('47dynamic:ucitajpedovesql', src)
+end)
+
+info = function(eventName)
+    MySQL.Async.fetchAll('SELECT * FROM pedovi', {}, function(result)
+        print('[^3SQL^0]: Ucitano ^4' .. #result .. '^0 pedova iz databaze.')
+    end)
+end
+
+ucitaj = function(eventName, src)
+    MySQL.Async.fetchAll('SELECT * FROM pedovi', {}, function(result)
+        TriggerClientEvent('47dynamic:ucitajpedove', src, result)
+    end)
+end
 
 local function provjeraverzije()
     local resourceName = GetCurrentResourceName()
