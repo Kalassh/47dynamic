@@ -39,8 +39,8 @@ AddEventHandler('47dynamic:obrisipeda', function(pedId)
     end)
 end)    
 
-RegisterServerEvent('47dynamic:ucitajpedove')
-AddEventHandler('47dynamic:ucitajpedove', function()
+RegisterServerEvent('47dynamic:ucitajpedovesql')
+AddEventHandler('47dynamic:ucitajpedovesql', function()
     MySQL.Async.fetchAll('SELECT * FROM pedovi', {}, function(result)
         TriggerClientEvent('47dynamic:ucitajpedove', -1, result)
         print('[^3SQL^0]: Ucitano ^4' .. #result .. '^0 pedova iz databaze.')
@@ -51,7 +51,7 @@ AddEventHandler('onResourceStart', function(resourceName)
     if (GetCurrentResourceName() ~= resourceName) then
         return
     end
-    TriggerEvent('47dynamic:ucitajpedove')
+    TriggerEvent('47dynamic:ucitajpedovesql')
 end)
 
 local function provjeraverzije()
