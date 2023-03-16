@@ -30,14 +30,41 @@ AddEventHandler('47dynamic:obrisipeda', function(pedId)
     MySQL.Async.execute('DELETE FROM pedovi WHERE id = @id', {
         ['@id'] = pedId
     }, function(rowsChanged)
-            if rowsChanged > 0 then
-                print('[^3SQL^0]: PED sa ID ^4' ..pedId.. '^0 je ^1izbrisan^0 iz databaze.')
+        if rowsChanged > 0 then
+            print('[^3SQL^0]: PED sa ID ^4' ..pedId.. '^0 je ^1izbrisan^0 iz databaze.')
                 
-            else
-                print('[^1ERROR^0]: Doslo je do greske prilikom ^1brisanja^0 peda iz databaze.')
-            end
+        else
+            print('[^1ERROR^0]: Doslo je do greske prilikom ^1brisanja^0 peda iz databaze.')
+        end
     end)
-end)    
+end)   
+
+RegisterServerEvent('47dynamic:sacuvajanimaciju')
+AddEventHandler('47dynamic:sacuvajanimaciju', function(pedId, animacija)
+    MySQL.Async.execute('UPDATE pedovi SET animacija = @animacija WHERE id = @id', {
+        ['@id'] = pedId,
+        ['@animacija'] = animacija
+    }, function(rowsChanged)
+        if rowsChanged > 0 then
+            print('[^3SQL^0]: Animacija za PED sa ID ^4' ..pedId.. '^0 je ^2spremljena^0 u databazu.')
+        else
+            print('[^1ERROR^0]: Doslo je do greske prilikom ^1azuriranja^0 animacije u databazi.')
+        end
+    end)
+end)
+
+RegisterServerEvent('47dynamic:uklonianimaciju')
+AddEventHandler('47dynamic:uklonianimaciju', function(pedId)
+    MySQL.Async.execute('UPDATE pedovi SET animacija = NULL WHERE id = @id', {
+        ['@id'] = pedId
+    }, function(rowsChanged)
+        if rowsChanged > 0 then
+            print('[^3SQL^0]: Animacija za PED sa ID ^4' ..pedId.. '^0 je ^1uklonjena^0 iz databaze.')
+        else
+            print('[^1ERROR^0]: Doslo je do greske prilikom ^1uklanjanja^0 animacije iz databaze.')
+        end
+    end)
+end)
 
 AddEventHandler('onResourceStart', function(resourceName)
     if GetCurrentResourceName() ~= resourceName then
