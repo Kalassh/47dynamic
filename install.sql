@@ -4,5 +4,6 @@ CREATE TABLE pedovi (
     x FLOAT(12, 7),
     y FLOAT(12, 7),
     z FLOAT(12, 7),
-    h FLOAT(12, 7)
+    h FLOAT(12, 7),
+    animacija VARCHAR(50)
 );
