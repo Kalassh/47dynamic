@@ -94,6 +94,80 @@ RegisterCommand('obrisipeda', function(source, args, rawCommand)
     end
 end)
 
+RegisterCommand('dodajanimaciju', function(source, args, rawCommand)
+    local najbliziped = locirajpeda()
+
+    if najbliziped ~= nil then
+        local pedId = nil
+        for i=1, #kreiranipedovi do
+            if kreiranipedovi[i].npc == najbliziped then
+                pedId = kreiranipedovi[i].id
+                break
+            end
+        end
+
+        local animacija = args[1]
+
+        if animacija ~= nil then
+            TaskStartScenarioInPlace(najbliziped, animacija, 0, false)
+            TriggerServerEvent('47dynamic:sacuvajanimaciju', pedId, animacija)
+            TriggerEvent('chat:addMessage', {
+                color = { 255, 0, 0 },
+                multiline = true,
+                args = { 'SERVER', 'Dodali ste animaciju '..animacija..' pedu!' }
+            })
+        else
+            TriggerEvent('chat:addMessage', {
+                color = { 255, 0, 0 },
+                multiline = true,
+                args = { 'SERVER', 'Morate unijeti ime animacije!' }
+            })
+        end
+    else
+        TriggerEvent('chat:addMessage', {
+            color = { 255, 0, 0 },
+            multiline = true,
+            args = { 'SERVER', 'Nema pedova u blizini!' }
+        })
+    end
+end)
+
+RegisterCommand('uklonianimaciju', function(source, args, rawCommand)
+    local najbliziped = locirajpeda()
+    
+    if najbliziped ~= nil then
+        local pedId = nil
+        for i=1, #kreiranipedovi do
+            if kreiranipedovi[i].npc == najbliziped then
+                pedId = kreiranipedovi[i].id
+                break
+            end
+        end
+    
+        if pedId ~= nil then
+            ClearPedTasks(najbliziped)
+            TriggerServerEvent('47dynamic:uklonianimaciju', pedId)
+            TriggerEvent('chat:addMessage', {
+                color = { 255, 0, 0 },
+                multiline = true,
+                args = { 'SERVER', 'Uklonili ste animaciju sa peda!' }
+            })
+        else
+            TriggerEvent('chat:addMessage', {
+                color = { 255, 0, 0 },
+                multiline = true,
+                args = { 'SERVER', 'Ped nije pronadjen u bazi!' }
+            })
+        end
+    else
+        TriggerEvent('chat:addMessage', {
+            color = { 255, 0, 0 },
+            multiline = true,
+            args = { 'SERVER', 'Nema pedova u blizini!' }
+        })
+    end
+end)
+
 RegisterNetEvent('47dynamic:ucitajpedove')
 AddEventHandler('47dynamic:ucitajpedove', function(peds)
     kreiranipedovi = {}
